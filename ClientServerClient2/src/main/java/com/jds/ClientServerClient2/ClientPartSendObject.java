@@ -1,10 +1,9 @@
 package com.jds.ClientServerClient2;
 /********************************************************************************************
- * To transmit an object via a SocketChannel, we’ll serialize it into a byte array and
- * wrap it in a ByteBuffer.
- * Before sending the serialized data, we also prepend a 4-byte integer to indicate the length of the byte array.
- *
- * This ensures the receiver knows how many bytes to read for the full object:
+ * Client side of the App
+ * It can send data to the server side
+ *  - as simple text
+ *  - as a json object from class MyObject01
  * *****************************************************************************************/
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -18,10 +17,18 @@ import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 
 public class ClientPartSendObject {
+    // the logger
     Logger logger = LoggerFactory.getLogger(ClientPartSendObject.class);
+
+    // server connection information
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 8080;
 
+    /********************************************************************************************
+     * Client side of the App
+     *  - Data created and is sent as a json object from class MyObject01
+     *  so the object is converted to a Json string before sending the string
+     * *****************************************************************************************/
      void demo_sendingObjectToServer() {
         try {
 
@@ -37,13 +44,16 @@ public class ClientPartSendObject {
         }
     }
 
+    /*****************************************************************
+     * Method for sending the data in the socket to the server
+     * ***************************************************************/
     void sendObject03(MyObject01 mydata) throws Exception {
 
 
             try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
                  PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
                  BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                //String request = "Request " + i + " -- " + message;
+
                 Gson gson = new Gson();
                 String json = gson.toJson(mydata);
 
@@ -57,7 +67,9 @@ public class ClientPartSendObject {
     }
 
 
-
+/********************************************************************
+ * unused at the moment
+ * *******************************************************************/
     void sendObject(SocketChannel channel, String message) {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         try (ObjectOutputStream objOut = new ObjectOutputStream(byteStream)) {
