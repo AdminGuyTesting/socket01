@@ -1,10 +1,12 @@
 package com.jds.ClientServerClient2;
 /********************************************************************************************
+ * 20250429 - Goal:
  * To transmit an object via a SocketChannel, we’ll serialize it into a byte array and
  * wrap it in a ByteBuffer.
  * Before sending the serialized data, we also prepend a 4-byte integer to indicate the length of the byte array.
+ * This ensures the receiver knows how many bytes to read for the full object
  *
- * This ensures the receiver knows how many bytes to read for the full object:
+ * 20250430 - Status: Easier to Jsonify the object and send it as a string. I might get back to this project later
  * *****************************************************************************************/
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +19,15 @@ import java.nio.channels.SocketChannel;
 
 public class ClientPart {
     Logger logger = LoggerFactory.getLogger(ClientPart.class);
-    private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 8080;
+    static String SERVER_INFO = "server_information.ini";
+    private String SERVER_ADDRESS;
+    private int SERVER_PORT;
 
+    public ClientPart(){
+        PropertiesOfTheApp prop = new PropertiesOfTheApp();
+        SERVER_PORT = prop.getPortPropertiesForTheApp();
+        SERVER_ADDRESS = prop.getServerAdressFromProperties();
+    }
     void demo01(){
         try (SocketChannel socketChannel = SocketChannel.open()) {
             socketChannel.connect(new InetSocketAddress(SERVER_ADDRESS, SERVER_PORT));

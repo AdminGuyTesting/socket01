@@ -1,5 +1,5 @@
 package com.jds.ClientServerClient2;
-/********************************************************************************************
+/* *******************************************************************************************
  * Client side of the App
  * It can send data to the server side
  *  - as simple text
@@ -10,10 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 
 public class ClientPartSendObject {
@@ -21,14 +19,21 @@ public class ClientPartSendObject {
     Logger logger = LoggerFactory.getLogger(ClientPartSendObject.class);
 
     // server connection information
-    private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 8080;
+    private String SERVER_ADDRESS;
+    private int SERVER_PORT;
 
     /********************************************************************************************
      * Client side of the App
      *  - Data created and is sent as a json object from class MyObject01
      *  so the object is converted to a Json string before sending the string
      * *****************************************************************************************/
+
+    public ClientPartSendObject(){
+        PropertiesOfTheApp prop = new PropertiesOfTheApp();
+        prop.checkIfPropertiesFileExistOrCreateTheDefaultFile();
+        SERVER_PORT = prop.getPortPropertiesForTheApp();
+        SERVER_ADDRESS = prop.getServerAdressFromProperties();
+    }
      void demo_sendingObjectToServer() {
         try {
 
